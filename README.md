@@ -1,11 +1,21 @@
 # STM32H7-intercom-LVGL
 Based on the Riverdi RVT70HSSNWC00-B.
 
-This is my take on how to implement a shareddata between the CM7 and CM4 core on the STM32H7, It also uses LVGL and HAL_FDCAN.
+This is my take on how to implement a shareddata between the CM7 and CM4 core on the STM32H7.
 
 The code is based on the Riverdi STM32CubeMX exsample (https://controllerstech.com/lvgl-on-riverdi-stm32-h7-display/#google_vignette), and imported into two VisualGDB projects.
 
-The shared data is placed in D3 domain at address RAM4
+The shared data is placed in D3 domain at address SRAM4
+struct SharedTest * const pSharedTest = (struct SharedTest *)SRAM4_Start;
+
+CSharedDataControl is the object that control the access to sharedData(sharedTest)
++ CSharedDataControl(uint8_t semIDTo, uint8_t semIDFrom); Constructor with two semafores for controlling the data access
++	bool GetAccessModify(); Get access to shared data, and notify other MCU about data changed
++	bool GetAccessRead();  Get access to shared data, and no notify
++ void ReleaseAccessModify(); Release access an notify other MCU about data changed
++ void ReleaseAccessRead(); Release access an not notify
++	virtual void FreeNotified() {}; A virtual function to 
+
 
 Papers to read: 
 + RM0399 https://www.st.com/resource/en/reference_manual/dm00176879-stm32h745755-and-stm32h747757-advanced-armbased-32bit-mcus-stmicroelectronics.pdf 
