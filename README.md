@@ -54,6 +54,11 @@ void HPControl::FreeNotified() // virtual function, called on changed from the C
 	}
 }
 ```
+Remember to call some sort of "Init" of the (HPControl) class, this must be done after the static SharedData is allocated. i.e. From main()
+The Register function sets up the pointers for the HSEM interrupt to work. (the HSEM interrupt is diverted to the correct FreeNotified function)
+```
+Register(pToCM4);
+```
 
 Papers to read: 
 + RM0399 https://www.st.com/resource/en/reference_manual/dm00176879-stm32h745755-and-stm32h747757-advanced-armbased-32bit-mcus-stmicroelectronics.pdf 
